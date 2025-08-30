@@ -2,10 +2,11 @@ import pytest
 from palindrome_radar.src.pre_processors import BasicPreprocessor, SpacyPreprocessor
 
 
-class TestBasicPreprocessor:
-    @pytest.fixture(autouse=True)
-    def setup(self):
-        self.pre_processor = BasicPreprocessor()
+@pytest.mark.parametrize("preprocessor_class", [BasicPreprocessor, SpacyPreprocessor])
+class TestPreprocessors:
+    @pytest.fixture
+    def preprocessor(self, preprocessor_class):
+        return preprocessor_class()
 
     @pytest.mark.parametrize(
         "word,expected",
@@ -16,8 +17,8 @@ class TestBasicPreprocessor:
             ("axDbTbd6", "axdbtbd6"),
         ],
     )
-    def test_lower_case(self, word, expected):
-        actual = self.pre_processor.lower_case(word)
+    def test_lower_case(self, preprocessor, word, expected):
+        actual = preprocessor.lower_case(word)
         assert actual == expected
 
     @pytest.mark.parametrize(
@@ -30,6 +31,19 @@ class TestBasicPreprocessor:
             ("ann-a", "anna"),
         ],
     )
-    def test_punctuation(self, word, expected):
-        actual = self.pre_processor.remove_punctuation(word)
+    def test_remove_punctuation(self, preprocessor, word, expected):
+        actual = preprocessor.remove_punctuation(word)
+        assert actual == expected
+
+    @pytest.mark.parametrize(
+        "word, expected",
+        [
+            ("Race car", "racecar"),
+            ("A man, a plan, a canal, Panama!", "amanaplanacanalpanama"),
+            ("Hello, World!", "helloworld"),
+            ("ann-a", "anna"),
+        ],
+    )
+    def test_pre_process(self, preprocessor, word, expected):
+        actual = preprocessor.pre_process(word)
         assert actual == expected
