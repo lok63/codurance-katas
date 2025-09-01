@@ -20,10 +20,12 @@ class RomanNumeralsConverter:
         result = ""
         for value, numeral in values:
             count = amount // value
-            if count:
+            if count != 0:
                 result += numeral * count
+                # substruct from the original amount the numer we just used
+                # i.e. if input is 11, then we printed X and now we want to remove the 10
+                # i.e. if input is 20, then we printed 2 Xs and now we want to remove them all together
                 amount -= value * count
-
         return result
 
 
