@@ -12,36 +12,39 @@ class TestRomanNumeralConverter:
     @pytest.mark.parametrize(
         "number, expected",
         [
-            (1, 'I'),
-            (2, 'II'),
-            (3, 'III'),
-            # (4, 'IV'),
-            (5, 'V'),
-            (6, 'VI'),
-            (7, 'VII'),
-            (8, 'VIII'),
-            # (9, 'IX'),
-        ]
+            (1, "I"),
+            (5, "V"),
+            (10, "X"),
+            (50, "L"),
+            (100, "C"),
+            (500, "D"),
+            (1000, "M"),
+            # Unit place numbers
+            (2, "II"),
+            (3, "III"),
+            (4, "IV"),
+            (6, "VI"),
+            (7, "VII"),
+            (8, "VIII"),
+            (9, "IX"),
+            # Non  Unit place numbers
+            (11, "XI"),
+            (12, "XII"),
+            (13, "XIII"),
+            (14, "XIV"),
+            (15, 'XV'),
+            (16, 'XVI'),
+            (17, 'XVII'),
+            (18, 'XVIII'),
+            (19, 'XIX'),
+            (20, "XX"),
+            (40, "XL"),
+            (90, "XC"),
+            (400, "CD"),
+            (900, "CM"),
+            (1994, "MCMXCIV"),
+        ],
     )
     def test_convert(self, number: int, expected: str):
         actual = self.converter.convert(number)
         assert actual == expected
-
-
-    @pytest.mark.parametrize(
-        "number, expected",
-        [
-            (1, {"I" : 1}),
-            (2, {"I" : 1}),
-            (3, {"I" : 1}),
-            (4, {"I" : 1, "V":5}),
-            (5, {"I" : 1, "V":5}),
-            (6, {"I" : 1, "V":5}),
-            (7, {"I" : 1, "V":5}),
-            (8, {"I" : 1, "V":5}),
-            # (9, 'IX'),
-        ]
-    )
-    def test_latin_candidates_to_use(self,number: int, expected: str):
-        actual = self.converter.find_latin_character_candidates(number)
-        actual == expected
